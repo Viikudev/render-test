@@ -1,5 +1,6 @@
 import express from "express"
 import cors from "cors"
+import path from "path"
 import { persons as initialPersons } from "./lib/data-placeholder"
 import { generateId } from "./lib/utils"
 
@@ -12,6 +13,7 @@ const morgan = require("morgan")
 
 app.use(cors())
 app.use(express.json())
+app.use(express.static("dist"))
 
 morgan.token("body", (request: Request) => {
   return JSON.stringify(request.body)
@@ -25,6 +27,10 @@ type PersonProps = {
   name: string
   number: string
 }
+
+app.get("/", (request, response) => {
+  response.sendFile(path.join(__dirname, "public", "dist/index.html"))
+})
 
 app.get("/api/persons", (request, response) => {
   response.json(persons)
