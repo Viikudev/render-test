@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
+const path_1 = __importDefault(require("path"));
 const data_placeholder_1 = require("./lib/data-placeholder");
 const utils_1 = require("./lib/utils");
 const unknown_middleware_1 = require("./middleware/unknown.middleware");
@@ -13,10 +14,15 @@ const app = (0, express_1.default)();
 const morgan = require("morgan");
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
+app.use(express_1.default.static(path_1.default.resolve(__dirname, "..", "public")));
 morgan.token("body", (request) => {
     return JSON.stringify(request.body);
 });
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms :body"));
+console.log(__dirname);
+app.get("/", (request, response) => {
+    response.sendFile(path_1.default.resolve(__dirname, "..", "public", "index.html"));
+});
 app.get("/api/persons", (request, response) => {
     response.json(persons);
 });
