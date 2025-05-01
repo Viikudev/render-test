@@ -13,7 +13,7 @@ const morgan = require("morgan")
 
 app.use(cors())
 app.use(express.json())
-app.use(express.static("dist"))
+app.use(express.static(path.join(__dirname, "..", "public")))
 
 morgan.token("body", (request: Request) => {
   return JSON.stringify(request.body)
@@ -23,13 +23,15 @@ app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :body")
 )
 
+console.log(__dirname)
+
 type PersonProps = {
   name: string
   number: string
 }
 
 app.get("/", (request, response) => {
-  response.sendFile(path.join(__dirname, "public", "dist/index.html"))
+  response.sendFile(path.join(__dirname, "..", "public", "index.html"))
 })
 
 app.get("/api/persons", (request, response) => {
